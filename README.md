@@ -18,7 +18,7 @@ We also reviewed the instructions provided in the [README.md](https://github.com
 
 ## Methodology
 
-The review was conducted during 2018-Mar-13 thru 2018-Apr-13 by the Quantstamp team, which included senior engineers Kacper Bak, Jonathan Haas, and Ed Zulkoski.
+The review was conducted during 2018-Mar-13 through 2018-Apr-13 by the Quantstamp team, which included senior engineers Kacper Bak, Jonathan Haas, and Ed Zulkoski.
 
 Their procedure can be summarized as follows:
 
@@ -80,7 +80,7 @@ Steps taken to run the full test suite:
 * Ran the coverage tool: `./node_modules/.bin/solidity-coverage`.
 * Installed the `mythril` tool from Pypi: `pip3 install mythril`.
 * Ran the `mythril` tool: `myth -x /interactive-coin-offerings/truffle/contracts/`.
-* To workaround limitations of the `Oyente` tool, we flattened the source code using truffle-flattener.
+* To workaround limitations of the `Oyente` tool, we flattened the source code using `truffle-flattener`.
 * Installed the `Oyente` tool from Docker: `docker pull luongnguyen/oyente && docker run -i -t luongnguyen/oyente`.
 * Ran the `Oyente` tool: `cd /oyente/oyente && python oyente.py -s Contract.sol`.
 
@@ -127,8 +127,8 @@ contract IsAnAddress {
 * `self.token.transfer(msg.sender, total)` 
     * `someAddress.send()` and `someAddress.transfer()` are considered safe against reentrancy. While these methods may still trigger custom code execution (as contracts can execute code when they receive ether), the called contract is only given a stipend of 2,300 gas which is currently only enough to log an event.
 
-* Mythril reports a potential integer underflow within `CrowdsaleLib.sol#282`, in the statement `return self.startingTokenBalance - self.withdrawTokensMap[self.owner]`. As values within `withdrawTokensMap` are always less than or equal to `startingTokenBalance` and  `startingTokenBalance` always being a positive value or zero (as it is of type `uint256`), this operation is not of concern.
-    * For usage of `CrowdsaleLib` outside of the context of IICO, we recommend that either `assert` or `BasicMathLib`, or [safe math library](https://github.com/OpenZeppelin/zeppelin-solidity/blob/master/contracts/math/SafeMath.sol) is used to protect against possible integer underflow. As per the [Solidity Documentation](https://solidity.readthedocs.io/en/develop/control-structures.html#error-handling-assert-require-revert-and-exceptions), usage of `assert` causes the EVM to revert all changes made to the state as there is no safe way to continue execution, because an expected effect did not occur. Furthermore, following this paradigm allows formal analysis tools to verify that the invalid opcode can never be reached, meaning code invariants are always preserved.
+* Mythril reports a potential integer underflow within `CrowdsaleLib.sol#282`, in the statement `return self.startingTokenBalance - self.withdrawTokensMap[self.owner]`. As values within `withdrawTokensMap` are always less than or equal to `startingTokenBalance` and  `startingTokenBalance` is always a positive value or zero (as it is of type `uint256`), this operation is not of concern.
+    * For usage of `CrowdsaleLib` outside of the context of IICO, we recommend that either `assert` or `BasicMathLib`, or [SafeMath library](https://github.com/OpenZeppelin/zeppelin-solidity/blob/master/contracts/math/SafeMath.sol) is used to protect against possible integer underflow. As per the [Solidity Documentation](https://solidity.readthedocs.io/en/develop/control-structures.html#error-handling-assert-require-revert-and-exceptions), usage of `assert` causes the EVM to revert all changes made to the state as there is no safe way to continue execution, because an expected effect did not occur. Furthermore, following this paradigm allows formal analysis tools to verify that the invalid opcode can never be reached, meaning code invariants are always preserved.
 * As a transaction's miner has leeway in reporting the time at which the mining occurred (to a certain extent), `block.timestamp` should be used with hesitation in circumstances requiring second-level precision in measuring time. As IICO is designed for usage over a far larger increment of time (e.g. a month) usage of `block.timestamp` within the contract does not pose a concern.
 
 # Recommendations
@@ -155,7 +155,7 @@ We noted that most arithmetic expressions within the contract do not utilize `Ba
 
 ## Code Documentation
 
-We noted that majority of the functions were self-explanatory, and standard documentation tags (such as `@dev`, `@param`, and `@returns`) were included throughout.
+We noted that the majority of the functions were self-explanatory, and standard documentation tags (such as `@dev`, `@param`, and `@returns`) were included throughout.
 
 The following are some minor (mostly typographical) issues throughout the code:
 
