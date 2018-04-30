@@ -100,7 +100,7 @@ The only uncovered line was in a function to log error messages; since this was 
 Symbolic execution (the Oyente tool) did not detect any vulnerabilities of types Parity Multisig Bug 2, Transaction-Ordering Dependence (TOD), Callstack Depth Attack, Timestamp Dependency, and Re-Entrancy Vulnerability.
 
 The Mythril tool reported a number of potential vulnerabilities within the `CrowdsaleLib.sol` file. 
-Mythril specified a number of calls with gas to dynamic addresses (`CrowdsaleLib.sol#246`, `CrowdsaleLib`.sol`#178`, `CrowdsaleLib`.sol`#170`, and `CrowdsaleLib`.sol`#204`). At the moment, Mythril reports external calls to dynamic addresses (from storage, calldata or `msg.sender`) with at least 2,300 gas. We confirmed, however, that the logic of the calling contract is unaffected if the called contract misbehaves (e.g. attempts to exploit reentrancy). **After further manual analysis, we have classified these calls as false positives, given our explanation below.**
+Mythril specified a number of calls with gas to dynamic addresses (`CrowdsaleLib.sol#246`, `CrowdsaleLib.sol#178`, `CrowdsaleLib.sol#170`, and `CrowdsaleLib.sol#204`). At the moment, Mythril reports external calls to dynamic addresses (from storage, calldata or `msg.sender`) with at least 2,300 gas. We confirmed, however, that the logic of the calling contract is unaffected if the called contract misbehaves (e.g. attempts to exploit reentrancy). **After further manual analysis, we have classified these calls as false positives, given our explanation below.**
  The calls are as follows: 
 
 * `self.token.balanceOf(this)`, `self.token.burnToken(_burnAmount)` 
